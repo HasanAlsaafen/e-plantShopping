@@ -370,7 +370,7 @@ function ProductList() {
                       fontWeight: "bold",
                     }}
                   >
-                    ${totalAmount}
+                    {totalAmount}
                   </span>
                 )}
               </div>

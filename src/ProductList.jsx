@@ -9,14 +9,18 @@ function ProductList() {
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
   const [addedToCart, setAddedToCart] = useState({});
   const cart = useSelector((state) => state.cart.items);
-  // حساب الإجمالي الكلي
   const [totalAmount, setTotalAmount] = useState(0);
-
+  useEffect(() => {
+    const updatedAddedToCart = {};
+    cart.forEach((item) => {
+      updatedAddedToCart[item.name] = true;
+    });
+    setAddedToCart(updatedAddedToCart);
+  }, [cart]);
   useEffect(() => {
     const calculateTotalAmount = () => {
       return cart.reduce((total, item) => total + item.quantity * item.cost, 0);
     };
-
     setTotalAmount(calculateTotalAmount());
   }, [cart]);
   const plantsArray = [
@@ -283,7 +287,10 @@ function ProductList() {
   };
   const handleAddToCart = (plant) => {
     dispatch(addItem(plant));
-    setAddedToCart({ ...CartItem, [plant.name]: true });
+    setAddedToCart((prevState) => ({
+      ...prevState,
+      [plant.name]: true,
+    }));
   };
   const handleCartClick = (e) => {
     e.preventDefault();
@@ -386,13 +393,19 @@ function ProductList() {
                       src={plant.image}
                       alt={plant.name}
                     />
+                    <div>{plant.cost}$</div>
                     <div className="product-title">{plant.name}</div>
-                    {/*Similarly like the above plant.name show other details like description and cost*/}
+                    <div className="product-description">
+                      {" "}
+                      {plant.description}
+                    </div>
+
                     <button
                       className="product-button"
                       onClick={() => handleAddToCart(plant)}
+                      disabled={addedToCart[plant.name]}
                     >
-                      Add to Cart
+                      {addedToCart[plant.name] ? "Added" : "Add to Cart"}
                     </button>
                   </div>
                 ))}

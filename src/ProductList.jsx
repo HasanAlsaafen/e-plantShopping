@@ -19,7 +19,7 @@ function ProductList() {
   }, [cart]);
   useEffect(() => {
     const calculateTotalAmount = () => {
-      return cart.reduce((total, item) => total + item.quantity * item.cost, 0);
+      return cart.reduce((total, item) => total + item.quantity , 0);
     };
     setTotalAmount(calculateTotalAmount());
   }, [cart]);
